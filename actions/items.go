@@ -5,6 +5,7 @@ import (
 	"github.com/gobuffalo/pop"
 	"github.com/nielsdingsbums/dwb/models"
 	"github.com/pkg/errors"
+	"sort"
 	"time"
 )
 
@@ -45,8 +46,18 @@ func (v ItemsResource) List(c buffalo.Context) error {
 		return errors.WithStack(err)
 	}
 
+	hours := []interface{}{[]string{"Englisch", "Geschichte", "Chemie", "Lernzeit", "Sport"},
+		[]string{"Englisch", "Geschichte", "Chemie", "Deutsch", "Englisch"},
+		[]string{"Deutsch", "Deutsch", "Mathematik", "Sport", "Diff"},
+		[]string{"Latein", "Deutsch", "Mathematik", "Sport", "Diff"},
+		[]string{"Biologie", "Kunst", "Latein", "Erdkunde", "Mathematik"},
+		[]string{"Biologie", "Kunst", "Latein", "Erdkunde", "Mathematik"},
+		[]string{"---", "---", "---", "---", "---"},
+		[]string{"ev. Rel / p. phil", "---", "Spanisch", "kath. Religion", "---"},
+		[]string{"ev. Rel / p. phil", "---", "Spanisch", "kath. Religion", "---"}}
 	// Add the paginator to the context so it can be used in the template.
 	c.Set("pagination", q.Paginator)
+	c.Set("hours", hours)
 
 	return c.Render(200, r.Auto(c, items))
 }
@@ -84,6 +95,12 @@ func (v ItemsResource) Show(c buffalo.Context) error {
 func (v ItemsResource) New(c buffalo.Context) error {
 	item := &models.Item{}
 
+	classes := []string{"Mathematik", "Englisch", "Informatik", "kath. Religion", "ev. Religion",
+		"praktische Philosophie", "Spanisch", "Erdkunde", "Ökologie", "Französisch",
+		"Latein", "Biologie", "Chemie", "Deutsch", "Kunst",
+		"Musik", "Sport", "Geschichte"}
+	sort.Strings(classes)
+	c.Set("classes", classes)
 	c.Set("currentDate", time.Now())
 
 	return c.Render(200, r.Auto(c, item))

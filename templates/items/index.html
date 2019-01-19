@@ -1,37 +1,63 @@
-<div class="page-header">
-    <h1>Items</h1>
+<div class="card">
+    <div class="card-body">
+        <h2 class="card-title">Stundenplan</h2>
+        <table class="table table-striped">
+            <thead>
+            <th>Montag</th>
+            <th>Dienstag</th>
+            <th>Mittwoch</th>
+            <th>Donnerstag</th>
+            <th>Freitag</th>
+            </thead>
+            <tbody>
+            <%= for (hour) in hours { %>
+            <tr>
+                <%= for (class) in hour { %>
+                <td><%= class %></td>
+                <% } %>
+            </tr>
+            <% } %>
+            </tbody>
+        </table>
+    </div>
 </div>
-<ul class="list-unstyled list-inline">
-    <li><a href="<%= newItemsPath() %>" class="btn btn-primary">Neu</a></li>
-</ul>
+<div class="card" id="hwCard">
+    <div class="card-body">
+        <h2>Aktuelle Hausaufgaben</h2>
+        <ul class="list-unstyled list-inline">
+            <li><a href="<%= newItemsPath() %>" class="btn btn-primary">Neu</a></li>
+        </ul>
 
-<table class="table table-striped">
-    <thead>
-    <th>Abgabedatum</th>
-    <th>Fach</th>
-    <th>Aufgabe</th>
-    <th>Autor</th>
-    <th>Aktionen</th>
-    </thead>
-    <tbody>
-    <%= for (item) in items { %>
-    <tr>
-        <td><%= item.DueDate %></td>
-        <td><%= item.Class %></td>
-        <td><%= item.Exercise %></td>
-        <td><%= item.Author %></td>
-        <td>
-            <div class="pull-right">
-                <a href="<%= itemPath({ item_id: item.ID }) %>" class="btn btn-info">View</a>
-                <a href="<%= editItemPath({ item_id: item.ID }) %>" class="btn btn-warning">Edit</a>
-                <a href="<%= itemPath({ item_id: item.ID }) %>" data-method="DELETE" data-confirm="Are you sure?"
-                   class="btn btn-danger">Destroy</a>
-            </div>
-        </td>
-    </tr>
-    <% } %>
-    </tbody>
-</table>
+        <table class="table table-striped">
+            <thead>
+            <th>Abgabedatum</th>
+            <th>Fach</th>
+            <th>Aufgabe</th>
+            <th>Autor</th>
+            <th class="text-right">Aktionen</th>
+            </thead>
+            <tbody>
+            <%= for (item) in items { %>
+            <tr>
+                <td><%= item.DueDate %></td>
+                <td><%= item.Class %></td>
+                <td><%= item.Exercise %></td>
+                <td><%= item.Author %></td>
+                <td>
+                    <div class="pull-right">
+                        <a href="<%= itemPath({ item_id: item.ID }) %>" class="btn btn-info">Anzeigen</a>
+                        <a href="<%= editItemPath({ item_id: item.ID }) %>" class="btn btn-warning">Bearbeiten</a>
+                        <a href="<%= itemPath({ item_id: item.ID }) %>" data-method="DELETE"
+                           data-confirm="Bist du gaaaaaaaaaanz sicher?"
+                           class="btn btn-danger">Löschen</a>
+                    </div>
+                </td>
+            </tr>
+            <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>
 
 <div class="text-center">
     <%= paginator(pagination) %>

@@ -1,6 +1,10 @@
-<%= f.InputTag("Bis", {value: currentDate}) %>
-<%= f.InputTag("Fach") %>
-<%= f.InputTag("Aufgabe") %>
-<%= f.TextAreaTag("Informationen", {rows: 2}) %>
-<%= f.InputTag("Author") %>
+<div class="row">
+    <div class="col-sm"><%= f.InputTag("Abgabetermin", {value: currentDate}) %></div>
+    <div class="col-sm"><%= f.InputTag("Author") %></div>
+</div>
+<div class="row">
+    <div class="col-sm"><%= f.InputTag("Fach") %></div>
+    <div class="col-sm"><%= f.InputTag("Aufgabe") %></div>
+</div>
+<%= f.TextAreaTag("Informationen", {rows: 3}) %>
 <button class="btn btn-success" role="submit">Schick die Flaschenpost ab!</button>
