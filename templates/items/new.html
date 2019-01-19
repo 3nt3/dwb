@@ -1,8 +1,8 @@
 <div class="page-header">
-  <h1>New Item</h1>
+  <h2>Neuer Eintrag</h2>
 </div>
 
 <%= form_for(item, {action: itemsPath(), method: "POST"}) { %>
   <%= partial("items/form.html") %>
-  <a href="<%= itemsPath() %>" class="btn btn-warning" data-confirm="Are you sure?">Cancel</a>
+  <a href="<%= itemsPath() %>" class="btn btn-warning" data-confirm="Biste sicher? Ganz sicher?">Abbrechen</a>
 <% } %>
