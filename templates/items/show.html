@@ -1,0 +1,29 @@
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title"><%= item.ID %></h5>
+        <h6 class="card-subtitle mb-2 text-muted"><%= item.Class%></h6>
+
+        <table class="table">
+            <tbody>
+            <tr>
+                <td><strong>Von</strong></td>
+                <td><%= item.CreatedAt%></td>
+            </tr>
+            <tr>
+                <td><strong>Bis</strong>
+                <td><%= item.DueDate%></td>
+            </tr>
+            <tr>
+                <td><strong>Aufgabe</strong></td>
+                <td><%= item.Exercise%></td>
+            </tr>
+            <%= if (informationSet) { %>
+            <tr>
+                <td><strong>Informationen</strong></td>
+                <td><%= item.Information%></td>
+            </tr>
+            <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>

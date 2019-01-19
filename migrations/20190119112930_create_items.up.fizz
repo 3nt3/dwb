@@ -1,0 +1,8 @@
+create_table("items") {
+	t.Column("id", "uuid", {primary: true})
+	t.Column("due_date", "time", {})
+	t.Column("class", "string", {})
+	t.Column("exercise", "string", {})
+	t.Column("information", "text", {null: true})
+	t.Column("author", "string", {})
+}
