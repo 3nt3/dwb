@@ -25,7 +25,8 @@ SET default_with_oids = false;
 
 CREATE TABLE public.items (
     id uuid NOT NULL,
-    due_date timestamp without time zone NOT NULL,
+    creation_date character varying(255) NOT NULL,
+    due_date character varying(255) NOT NULL,
     class character varying(255) NOT NULL,
     exercise character varying(255) NOT NULL,
     information text,

@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card hw-card">
     <div class="card-body">
         <h2 class="card-title">Stundenplan</h2>
         <table class="table table-striped">
@@ -21,12 +21,17 @@
         </table>
     </div>
 </div>
-<div class="card" id="hwCard">
+<div class="card hw-card">
     <div class="card-body">
-        <h2>Aktuelle Hausaufgaben</h2>
-        <ul class="list-unstyled list-inline">
-            <li><a href="<%= newItemsPath() %>" class="btn btn-primary">Neu</a></li>
-        </ul>
+        <div class="row">
+            <div class="col-10">
+                <h2>Aktuelle Hausaufgaben</h2>
+            </div>
+            <div class="col-dm-auto btn-group-vertical">
+                <a id="newBtn" href="<%= newItemsPath() %>" class="btn btn-primary btn-lg">Neu</a>
+            </div>
+        </div>
+
 
         <table class="table table-striped">
             <thead>
@@ -58,7 +63,18 @@
         </table>
     </div>
 </div>
-
+<div class="row hw-card">
+    <div class="col-sm">
+        <div class="jumbotron text-white bg-warning">
+            <h2>Untis</h2>
+        </div>
+    </div>
+    <div class="col-sm">
+        <div class="jumbotron text-white bg-primary">
+            <h2>Infos</h2>
+        </div>
+    </div>
+</div>
 <div class="text-center">
     <%= paginator(pagination) %>
 </div>

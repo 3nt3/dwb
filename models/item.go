@@ -12,14 +12,15 @@ import (
 )
 
 type Item struct {
-	ID          uuid.UUID    `json:"id" db:"id"`
-	CreatedAt   time.Time    `json:"created_at" db:"created_at"`
-	UpdatedAt   time.Time    `json:"updated_at" db:"updated_at"`
-	DueDate     time.Time    `json:"due_date" db:"due_date"`
-	Class       string       `json:"class" db:"class"`
-	Exercise    string       `json:"exercise" db:"exercise"`
-	Information nulls.String `json:"information" db:"information"`
-	Author      string       `json:"author" db:"author"`
+	ID           uuid.UUID    `json:"id" db:"id"`
+	CreatedAt    time.Time    `json:"created_at" db:"created_at"`
+	UpdatedAt    time.Time    `json:"updated_at" db:"updated_at"`
+	CreationDate string       `json:"creation_date" db:"creation_date"`
+	DueDate      string       `json:"due_date" db:"due_date"`
+	Class        string       `json:"class" db:"class"`
+	Exercise     string       `json:"exercise" db:"exercise"`
+	Information  nulls.String `json:"information" db:"information"`
+	Author       string       `json:"author" db:"author"`
 }
 
 // String is not required by pop and may be deleted

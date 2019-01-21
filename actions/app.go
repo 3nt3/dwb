@@ -61,6 +61,7 @@ func App() *buffalo.App {
 		app.GET("/", HomeHandler)
 
 		app.Resource("/items", ItemsResource{})
+		
 		app.ServeFiles("/", assetsBox) // serve files from the public directory
 	}
 
