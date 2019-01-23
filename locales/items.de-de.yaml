@@ -1,0 +1,6 @@
+- id: "item.created.success"
+  translation: "Der Eintrag wurde erfolgreich hinzugefügt."
+- id: "item.updated.success"
+  translation: "Der Eintrag wurde erfolgreich überarbeitet."
+- id: "item.destroyed.success"
+  translation: "Der Eintrag wurde erfolgreich gelöscht."
