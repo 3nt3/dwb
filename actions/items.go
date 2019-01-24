@@ -174,6 +174,13 @@ func (v ItemsResource) Edit(c buffalo.Context) error {
 		return c.Error(404, err)
 	}
 
+	classes := []string{"Englisch", "Geschichte", "Chemie", "Lernzeit", "Sport", "Mathematik", "Biologie", "Geschichte", "Informatik", "Spanisch", "Ökologie", "ev. Religion", "kath. Religion", "p. Philosophie", "Latein", "Französisch"}
+
+	t := time.Now()
+	currentDate := fmt.Sprintf("%02d.%02d.%d", t.Day(), t.Month(), t.Year())
+
+	c.Set("currentDate", currentDate)
+	c.Set("classes", classes)
 	return c.Render(200, r.Auto(c, item))
 }
 
