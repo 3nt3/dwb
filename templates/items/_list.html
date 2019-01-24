@@ -1,0 +1,42 @@
+<div class="card hw-card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-10">
+                <h2>Aktuelle Hausaufgaben</h2>
+            </div>
+            <div class="col-dm-auto btn-group-vertical">
+                <a id="newBtn" href="<%= newItemsPath() %>" class="btn btn-primary btn-lg">Neu</a>
+            </div>
+        </div>
+
+
+        <table class="table table-striped">
+            <thead>
+            <th>Abgabedatum</th>
+            <th>Fach</th>
+            <th>Aufgabe</th>
+            <th>Autor</th>
+            <th class="text-right">Aktionen</th>
+            </thead>
+            <tbody>
+            <%= for (item) in items { %>
+            <tr>
+                <td><%= item.DueDate %></td>
+                <td><%= item.Class %></td>
+                <td><%= item.Exercise %></td>
+                <td><%= item.Author %></td>
+                <td>
+                    <div class="pull-right">
+                        <a href="<%= itemPath({ item_id: item.ID }) %>" class="btn btn-info">Anzeigen</a>
+                        <a href="<%= editItemPath({ item_id: item.ID }) %>" class="btn btn-warning">Bearbeiten</a>
+                        <a href="<%= itemPath({ item_id: item.ID }) %>" data-method="DELETE"
+                           data-confirm="Bist du gaaaaaaaaaanz sicher?"
+                           class="btn btn-danger">Löschen</a>
+                    </div>
+                </td>
+            </tr>
+            <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -62,6 +62,13 @@ func (v ItemsResource) List(c buffalo.Context) error {
 	c.Set("pagination", q.Paginator)
 	c.Set("hours", hours)
 
+	badgeValues := make(map[string]int)
+	for _, item := range *items {
+		badgeValues[item.Class]++
+	}
+
+	c.Set("badgeValues",badgeValues)
+
 	return c.Render(200, r.Auto(c, items))
 }
 
@@ -127,6 +134,7 @@ func (v ItemsResource) Create(c buffalo.Context) error {
 	}
 
 	log.Print(item)
+
 
 	// Validate the data from the html form
 	verrs, err := tx.ValidateAndCreate(item)
