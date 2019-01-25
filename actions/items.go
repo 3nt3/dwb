@@ -29,6 +29,12 @@ type ItemsResource struct {
 	buffalo.Resource
 }
 
+type badgeValue struct {
+	Date string
+	Class models.Class
+	Value int
+}
+
 // List gets all Items. This function is mapped to the path
 // GET /items
 func (v ItemsResource) List(c buffalo.Context) error {
@@ -49,25 +55,36 @@ func (v ItemsResource) List(c buffalo.Context) error {
 		return errors.WithStack(err)
 	}
 
-	hours := []interface{}{[]string{"Englisch", "Geschichte", "Chemie", "Lernzeit", "Sport"},
-		[]string{"Englisch", "Geschichte", "Chemie", "Deutsch", "Englisch"},
-		[]string{"Deutsch", "Deutsch", "Mathematik", "Sport", "Diff"},
-		[]string{"Latein", "Deutsch", "Mathematik", "Sport", "Diff"},
-		[]string{"Biologie", "Kunst", "Latein", "Erdkunde", "Mathematik"},
-		[]string{"Biologie", "Kunst", "Latein", "Erdkunde", "Mathematik"},
-		[]string{"---", "---", "---", "---", "---"},
-		[]string{"ev. Rel / p. phil", "---", "Spanisch", "kath. Religion", "---"},
-		[]string{"ev. Rel / p. phil", "---", "Spanisch", "kath. Religion", "---"}}
 	// Add the paginator to the context so it can be used in the template.
 	c.Set("pagination", q.Paginator)
-	c.Set("hours", hours)
+	//c.Set("hours", hours)
 
-	badgeValues := make(map[string]int)
-	for _, item := range *items {
-		badgeValues[item.Class]++
+	classes := &[]models.Class{}
+
+	if err := q.All(classes); err != nil {
+		return errors.WithStack(err)
 	}
 
-	c.Set("badgeValues",badgeValues)
+	var badgeValues []badgeValue
+	for _, item := range *items {
+		// TODO: Only iterate over items whos due date is in the future.
+		for _, class := range *classes {
+			if class.Name == item.Class {
+				date, _ := time.Parse("02.01.2006", item.DueDate)
+				day := int(date.Weekday())
+				if class.Day == day {
+					foo := badgeValue{item.DueDate, class, 1}
+					badgeValues = append(badgeValues, foo)
+				}
+			}
+		}
+	}
+	for _, item := range badgeValues {
+
+	}
+
+	// TODO: only show badge on exact date
+	c.Set("badgeValues", badgeValues)
 
 	return c.Render(200, r.Auto(c, items))
 }
@@ -133,8 +150,8 @@ func (v ItemsResource) Create(c buffalo.Context) error {
 		return errors.WithStack(errors.New("no transaction found"))
 	}
 
-	log.Print(item)
-
+	//log.Print(item)
+	// TODO some kind of migration from google sheets
 
 	// Validate the data from the html form
 	verrs, err := tx.ValidateAndCreate(item)
@@ -176,10 +193,8 @@ func (v ItemsResource) Edit(c buffalo.Context) error {
 
 	classes := []string{"Englisch", "Geschichte", "Chemie", "Lernzeit", "Sport", "Mathematik", "Biologie", "Geschichte", "Informatik", "Spanisch", "Ökologie", "ev. Religion", "kath. Religion", "p. Philosophie", "Latein", "Französisch"}
 
-	t := time.Now()
-	currentDate := fmt.Sprintf("%02d.%02d.%d", t.Day(), t.Month(), t.Year())
-
-	c.Set("currentDate", currentDate)
+	c.Set("dueDate", item.DueDate)
+	c.Set("createdAt", item.CreatedAt)
 	c.Set("classes", classes)
 	return c.Render(200, r.Auto(c, item))
 }

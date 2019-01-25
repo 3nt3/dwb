@@ -1,8 +1,19 @@
 <div class="page-header">
-  <h1>Edit Item</h1>
+    <h1>Edit Item</h1>
 </div>
 
 <%= form_for(item, {action: itemPath({ item_id: item.ID }), method: "PUT"}) { %>
-  <%= partial("items/form.html") %>
-  <a href="<%= itemPath({ item_id: item.ID }) %>" class="btn btn-warning" data-confirm="Are you sure?">Cancel</a>
+<div class="row">
+    <div class="col-sm"><%= f.InputTag("Von", {name: "CreationDate", value: createdAt}) %></div>
+    <div class="col-sm"><%= f.InputTag("Bis", {name: "DueDate", value: dueDate}) %></div>
+    <div class="col-sm"><%= f.InputTag("Autor", {name: "Author"}) %></div>
+</div>
+<div class="row">
+    <div class="col-sm"><%= f.SelectTag("Fach", {name: "Class", options: classes}) %></div>
+    <div class="col-sm"><%= f.InputTag("Aufgabe", {name: "Exercise"}) %></div>
+</div>
+<%= f.TextAreaTag("Information", {rows: 3}) %>
+<button class="btn btn-success" role="submit">Schick die Flaschenpost ab!</button>
+
+<a href="<%= itemPath({ item_id: item.ID }) %>" class="btn btn-warning" data-confirm="Are you sure?">Cancel</a>
 <% } %>

@@ -20,6 +20,24 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
+-- Name: classes; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.classes (
+    id uuid NOT NULL,
+    name character varying(255) NOT NULL,
+    room character varying(255) NOT NULL,
+    teacher character varying(255) NOT NULL,
+    day integer NOT NULL,
+    hour integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.classes OWNER TO postgres;
+
+--
 -- Name: items; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -48,6 +66,14 @@ CREATE TABLE public.schema_migration (
 
 
 ALTER TABLE public.schema_migration OWNER TO postgres;
+
+--
+-- Name: classes classes_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.classes
+    ADD CONSTRAINT classes_pkey PRIMARY KEY (id);
+
 
 --
 -- Name: items items_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres

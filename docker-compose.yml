@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+  traefik:
+    image: traefik
+    command: --api --docker
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      - "traefik.backend=traefik"
+      - "traefik.frontend.rule=Host:traefik.docker.localhost"
+      - "traefik.port=8080"
+      - "traefik.enable=true"
+
+  dwb:
+    build: .
+    ports:
+      - "3001:3000"
+    labels:
+      - "traefik.backend=dwb"
+      - "traefik.frontend.rule=Host:dwb.docker.localhost"
+      - "traefik.port=3000"
+      - "traefik.enable=true"
