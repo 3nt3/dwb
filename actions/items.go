@@ -29,12 +29,6 @@ type ItemsResource struct {
 	buffalo.Resource
 }
 
-type badgeValue struct {
-	Date string
-	Class models.Class
-	Value int
-}
-
 // List gets all Items. This function is mapped to the path
 // GET /items
 func (v ItemsResource) List(c buffalo.Context) error {
@@ -65,26 +59,52 @@ func (v ItemsResource) List(c buffalo.Context) error {
 		return errors.WithStack(err)
 	}
 
-	var badgeValues []badgeValue
+	var futureItems []models.Item
 	for _, item := range *items {
-		// TODO: Only iterate over items whos due date is in the future.
+		date, _ := time.Parse("02.01.2006", item.DueDate)
+		log.Print(item)
+		if date.After(time.Now()) {
+			futureItems = append(futureItems, item)
+		}
+	}
+
+	//log.Printf("%+v", futureItems)
+
+	// TODO: Make this stuff woooooork!!
+
+	for _, item := range futureItems {
 		for _, class := range *classes {
+			log.Printf("className: %s, itemName: %s", class.Name, item.Class)
 			if class.Name == item.Class {
-				date, _ := time.Parse("02.01.2006", item.DueDate)
-				day := int(date.Weekday())
-				if class.Day == day {
-					foo := badgeValue{item.DueDate, class, 1}
-					badgeValues = append(badgeValues, foo)
+				foo := class
+				tx.Destroy(&class)
+				log.Println("This name fits.")
+				date, err := time.Parse("02.01.2006", item.DueDate)
+				if err != nil {
+					log.Println(err.Error())
 				}
+				day := int(date.Weekday())
+				if foo.Day == day {
+					log.Println("the day is right")
+					log.Printf("value: %d", foo.Value)
+					foo.Value++
+					log.Printf("value: %d", foo.Value)
+				}
+				tx.Create(&foo)
+				log.Printf("%+v", &foo)
+			} else {
+				log.Println("This class is not fitting")
 			}
 		}
 	}
-	for _, item := range badgeValues {
 
-	}
+	foo := &[]models.Class{}
 
-	// TODO: only show badge on exact date
-	c.Set("badgeValues", badgeValues)
+	err := q.All(foo)
+	log.Println(err)
+	log.Println(foo)
+
+	c.Set("classes", *classes)
 
 	return c.Render(200, r.Auto(c, items))
 }
@@ -150,13 +170,22 @@ func (v ItemsResource) Create(c buffalo.Context) error {
 		return errors.WithStack(errors.New("no transaction found"))
 	}
 
-	//log.Print(item)
 	// TODO some kind of migration from google sheets
 
 	// Validate the data from the html form
 	verrs, err := tx.ValidateAndCreate(item)
 	if err != nil {
 		return errors.WithStack(err)
+	}
+
+	_, err = time.Parse("02.01.2006", item.DueDate)
+	if err != nil {
+		return c.Render(422, r.Auto(c, item))
+	}
+
+	_, err = time.Parse("02.01.2006", item.CreationDate)
+	if err != nil {
+		return c.Render(422, r.Auto(c, item))
 	}
 
 	if verrs.HasAny() {

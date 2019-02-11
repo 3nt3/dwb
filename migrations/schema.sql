@@ -26,10 +26,11 @@ SET default_with_oids = false;
 CREATE TABLE public.classes (
     id uuid NOT NULL,
     name character varying(255) NOT NULL,
-    room character varying(255) NOT NULL,
     teacher character varying(255) NOT NULL,
+    room character varying(255) NOT NULL,
     day integer NOT NULL,
     hour integer NOT NULL,
+    value integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );

@@ -19,6 +19,7 @@ type Class struct {
 	Room      string    `json:"room" db:"room"`
 	Day       int       `json:"day" db:"day"`
 	Hour      int       `json:"hour" db:"hour"`
+	Value     int       `json:"value" db:"value"`
 }
 
 // String is not required by pop and may be deleted
