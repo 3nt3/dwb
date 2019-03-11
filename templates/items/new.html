@@ -1,8 +1,11 @@
-<div class="page-header">
-  <h2>Neuer Eintrag</h2>
-</div>
+<div class="container">
 
-<%= form_for(item, {action: itemsPath(), method: "POST", id: "theForm"}) { %>
-  <%= partial("items/form.html") %>
-  <a href="<%= itemsPath() %>" class="btn btn-warning" data-confirm="Biste sicher? Ganz sicher?">Abbrechen</a>
-<% } %>
+    <div class="page-header">
+        <h2>Neuer Eintrag</h2>
+    </div>
+
+    <%= form_for(item, {action: itemsPath(), method: "POST", id: "theForm"}) { %>
+    <%= partial("items/form.html") %>
+    <a href="<%= itemsPath() %>" class="btn btn-warning" data-confirm="Biste sicher? Ganz sicher?">Abbrechen</a>
+    <% } %>
+</div>

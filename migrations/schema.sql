@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 11.1
--- Dumped by pg_dump version 11.1
+-- Dumped from database version 11.2
+-- Dumped by pg_dump version 11.2
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -26,8 +26,6 @@ SET default_with_oids = false;
 CREATE TABLE public.classes (
     id uuid NOT NULL,
     name character varying(255) NOT NULL,
-    teacher character varying(255) NOT NULL,
-    room character varying(255) NOT NULL,
     day integer NOT NULL,
     hour integer NOT NULL,
     value integer NOT NULL,

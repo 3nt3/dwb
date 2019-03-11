@@ -1,43 +1,21 @@
-<html>
-<head>
+<style>
+  .auth-center{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+  .sign-in-btn{
+    margin-right: 10px;
+  }
+</style>
 
-</head>
-<body>
-<div class="container">
-    <div class="jumbotron" style="margin-top: 20px">
-        <h1>DWB</h1>
-        <h4>Digitales Weißes Brett</h4>
-        <span>Wir sind besser als das <a href="https://digitales-schwarzes-brett.de/#dsb" target="kuchen">digitale schwarze brett</a></span>
-    </div>
-    <div class="row">
-        <div class="col-sm">
-            <div class="card" id="something">
-                <div class="card-body">
-                    <h2>Was ist das?</h2>
-                    Klassenweite
-                    <ul>
-                        <li>
-                            Hausaufgabentabelle
-                        </li>
-                        <li>
-                            Terminkalender
-                        </li>
-                        <li>
-                            Stundenplan
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm">
-            <div class="card" id="something">
-                <div class="card-body">
-                    <h2>Warum solltest du das nutzen?</h2>
-                    <span>Warum nicht?</span>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="auth-center">
+  <%= if (current_user) { %>
+    <h1><%= current_user.Email %></h1>
+    <a href="/signout" data-method="DELETE">Sign Out</a>
+  <% } else { %>
+    <a href="/signin" class="btn btn-primary">Sign In</a>
+    <a href="/users/new" class="btn btn-success">Register</a>
+  <% } %>
 </div>
-</body>
-</html>

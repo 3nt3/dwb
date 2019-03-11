@@ -1,6 +1,11 @@
 package actions
 
 import (
+	"encoding/csv"
+	"fmt"
+	"io/ioutil"
+	"strings"
+
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/pop"
 	"github.com/nielsdingsbums/dwb/models"
@@ -27,6 +32,11 @@ type ClassesResource struct {
 // List gets all Classes. This function is mapped to the path
 // GET /classes
 func (v ClassesResource) List(c buffalo.Context) error {
+	err := ReadCSV(c, "classes.csv")
+	if err != nil {
+		fmt.Printf("[classes] (ReadCSV) err: %v\n", err)
+	}
+
 	// Get the DB connection from the context
 	tx, ok := c.Value("tx").(*pop.Connection)
 	if !ok {
@@ -202,4 +212,50 @@ func (v ClassesResource) Destroy(c buffalo.Context) error {
 
 	// Redirect to the classes index page
 	return c.Render(200, r.Auto(c, class))
+}
+
+// Reads a CSV File and
+func ReadCSV(c buffalo.Context, path string) error {
+	dat, err := ioutil.ReadFile(path)
+	if err != nil {
+		fmt.Printf("[read file] error: %v\n", err)
+		return err
+	}
+	r := csv.NewReader(strings.NewReader(string(dat)))
+	records, err := r.ReadAll()
+	if err != nil {
+		fmt.Printf("[decode csv] error: %v\n", err)
+		return err
+	}
+	fmt.Printf("[classes] (ReadCSV) decoded csv: %+v\n", records)
+
+	records = records[1:]
+
+	// Get the DB connection from the context
+	tx, ok := c.Value("tx").(*pop.Connection)
+	if !ok {
+		return errors.WithStack(errors.New("no transaction found"))
+	}
+
+	for i, row := range records {
+		for j, item := range row {
+			if strings.ReplaceAll(item, " ", "") != "" && item != "" {
+				class := &models.Class{}
+				class.Name = item
+				class.Day = j + 1
+				class.Hour = i + 1
+				class.Value = 0
+
+				fmt.Printf("[classes] (ReadCSV) new class: %v\n", class)
+
+				// Validate the data from the html form
+				_, err := tx.ValidateAndCreate(class)
+				if err != nil {
+					return errors.WithStack(err)
+				}
+			}
+		}
+	}
+
+	return nil
 }

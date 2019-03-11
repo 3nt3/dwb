@@ -1,0 +1,10 @@
+<%= for (row) in days { %>
+<ol>
+    <%= for (item) in row { %>
+    <li>
+        <%= item.Name %> <strong><%= item.Value%></strong>
+    </li>
+    <% } %>
+
+</ol>
+<% } %>

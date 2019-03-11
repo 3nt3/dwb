@@ -12,10 +12,12 @@
 </head>
 <body>
 
+
+<%= partial("nav.html") %>
 <div class="container">
     <%= partial("flash.html") %>
-    <%= yield %>
 </div>
+<%= yield %>
 
 <%= javascriptTag("application.js") %>
 </body>

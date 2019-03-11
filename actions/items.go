@@ -42,9 +42,8 @@ func (v ItemsResource) List(c buffalo.Context) error {
 
 	// Paginate results. Params "page" and "per_page" control pagination.
 	// Default values are "page=1" and "per_page=20".
-	q := tx.PaginateFromParams(c.Params())
-
-	// Retrieve all Items from the DB
+	q := tx.Paginate(1, 100000)
+	//q.Paginator.PerPage = 10000000
 	if err := q.All(items); err != nil {
 		return errors.WithStack(err)
 	}
@@ -62,7 +61,7 @@ func (v ItemsResource) List(c buffalo.Context) error {
 	var futureItems []models.Item
 	for _, item := range *items {
 		date, _ := time.Parse("02.01.2006", item.DueDate)
-		log.Print(item)
+		//log.Print(item)
 		if date.After(time.Now()) {
 			futureItems = append(futureItems, item)
 		}
@@ -74,37 +73,42 @@ func (v ItemsResource) List(c buffalo.Context) error {
 
 	for _, item := range futureItems {
 		for _, class := range *classes {
-			log.Printf("className: %s, itemName: %s", class.Name, item.Class)
+			log.Printf("[+] className: %s, itemName: %s", class.Name, item.Class)
 			if class.Name == item.Class {
 				foo := class
 				tx.Destroy(&class)
-				log.Println("This name fits.")
+				//log.Println("This name fits.")
 				date, err := time.Parse("02.01.2006", item.DueDate)
 				if err != nil {
 					log.Println(err.Error())
 				}
 				day := int(date.Weekday())
 				if foo.Day == day {
-					log.Println("the day is right")
-					log.Printf("value: %d", foo.Value)
+					log.Println("[+]  => the day is fitting")
+					//log.Printf("value: %d", foo.Value)
 					foo.Value++
-					log.Printf("value: %d", foo.Value)
+					//log.Printf("value: %d", foo.Value)
 				}
 				tx.Create(&foo)
-				log.Printf("%+v", &foo)
+				//log.Printf("%+v", &foo)
 			} else {
-				log.Println("This class is not fitting")
+				log.Println("[-]  => This class is not fitting")
 			}
 		}
 	}
 
-	foo := &[]models.Class{}
+	days := [5][9]models.Class{}
 
-	err := q.All(foo)
-	log.Println(err)
-	log.Println(foo)
+	for _, item := range *classes {
+		days[item.Day-1][item.Hour-1] = item
+	}
 
-	c.Set("classes", *classes)
+	for i, day := range days {
+		log.Printf("[+] Day %d: %v", i, day)
+	}
+
+	//log.Println(rows)
+	c.Set("days", days)
 
 	return c.Render(200, r.Auto(c, items))
 }
