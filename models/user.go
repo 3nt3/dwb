@@ -19,6 +19,7 @@ type User struct {
 	CreatedAt    time.Time `json:"created_at" db:"created_at"`
 	UpdatedAt    time.Time `json:"updated_at" db:"updated_at"`
 	Email        string    `json:"email" db:"email"`
+	Username     string    `json:"username db:"username"`
 	PasswordHash string    `json:"password_hash" db:"password_hash"`
 
 	Password             string `json:"-" db:"-"`
@@ -58,15 +59,16 @@ func (u *User) Validate(tx *pop.Connection) (*validate.Errors, error) {
 	var err error
 	return validate.Validate(
 		&validators.StringIsPresent{Field: u.Email, Name: "Email"},
+		&validators.StringIsPresent{Field: u.Username, Name: "Username"},
 		&validators.StringIsPresent{Field: u.PasswordHash, Name: "PasswordHash"},
 		// check to see if the email address is already taken:
 		&validators.FuncValidator{
-			Field:   u.Email,
-			Name:    "Email",
-			Message: "%s is already taken",
+			Field:   u.Username,
+			Name:    "Username",
+			Message: "%s ist schon vergeben",
 			Fn: func() bool {
 				var b bool
-				q := tx.Where("email = ?", u.Email)
+				q := tx.Where("username = ?", u.Username)
 				if u.ID != uuid.Nil {
 					q = q.Where("id != ?", u.ID)
 				}
